@@ -1,21 +1,20 @@
-1，确保已经开启权限
-
-第一步需要做的就是开启可以运行自己应用的权限。
+1，确保已经开启权限，第一步需要做的就是开启可以运行自己应用的权限。
 
 Additional services -> Run your own applications -> Enabled 如果不开启这一项，自己的用户目录下的所有文件都无法添加可执行权限。
 
 2，配置端口号
+
 按顺序打开添加端口号Port reservation->Add port->Random->add
 
 3，ssh 进入 服务器
-#s6.serv00.com可能会因为被墙连不上,可以用web6.serv00.com或者cache6.serv00.com
 
-ssh -p 22 <Login>@<SSH/SFTP服务器地址> 
-如果不会使用终端可采用其他ssh工具或者webssh，只需要输入账号密码端口即可
+s6.serv00.com可能会因为被墙连不上,可以用web6.serv00.com或者cache6.serv00.com
+
+ssh -p 22 <Login>@<SSH/SFTP服务器地址>  如果不会使用终端可采用其他ssh工具或者webssh，只需要输入账号密码端口即可
 
 4，拉取代码到指定目录
 
-cd ~/domains && git clone https://github.com/yixiu001/serv00-script.git && cd serv00-script && bash vless.sh
+cd ~/domains && git clone https://github.com/DemonFengYuXiang/serv00-script.git && cd serv00-script && bash vless.sh
 
 5，执行命令
 
