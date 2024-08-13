@@ -1,5 +1,8 @@
 1，确保已经开启权限
-第一步需要做的就是开启可以运行自己应用的权限。Additional services -> Run your own applications -> Enabled 如果不开启这一项，自己的用户目录下的所有文件都无法添加可执行权限。
+
+第一步需要做的就是开启可以运行自己应用的权限。
+
+Additional services -> Run your own applications -> Enabled 如果不开启这一项，自己的用户目录下的所有文件都无法添加可执行权限。
 
 2，配置端口号
 按顺序打开添加端口号Port reservation->Add port->Random->add
