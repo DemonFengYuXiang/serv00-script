@@ -1,69 +1,46 @@
-# serv00-script
+1，确保已经开启权限
+第一步需要做的就是开启可以运行自己应用的权限。Additional services -> Run your own applications -> Enabled 如果不开启这一项，自己的用户目录下的所有文件都无法添加可执行权限。
 
-## 恢复 vless 服务并发送 Telegram 通知
+2，配置端口号
+按顺序打开添加端口号Port reservation->Add port->Random->add
 
-### 使用要求
-必须是看以下视频部署的vless节点方可直接使用
-[serv00一键部署vless节点](https://youtu.be/QnlzpvDl_mo)
-如果不是看以上视频部署的，可自行修改.github/workflows/check_vless.sh里面第31行命令
-具体问题可反馈至群聊[https://t.me/yxjsjl](https://t.me/yxjsjl)
+3，ssh 进入 服务器
+#s6.serv00.com可能会因为被墙连不上,可以用web6.serv00.com或者cache6.serv00.com
 
-**新人YouTube希望大家点个Star🌟🌟🌟支持下**
+ssh -p 22 <Login>@<SSH/SFTP服务器地址> 
+如果不会使用终端可采用其他ssh工具或者webssh，只需要输入账号密码端口即可
 
-### 1，服务器准备
-1. **您的服务器需要安装并配置了 PM2，并且具有 SSH 连接凭据（用户名、密码或密钥）。**
-  - Telegram Bot
+4，拉取代码到指定目录
 
-2. **创建一个 Telegram Bot 并获取其 API Token。**
-  - 获取您的 Telegram 用户或群组的 Chat ID。
-3. **GitHub Secrets**
-  - 在您的 GitHub 仓库中设置以下 Secrets：
-  - ACCOUNTS_JSON：包含所有服务器信息的 JSON 字符串。
-  - TELEGRAM_TOKEN：您的 Telegram Bot API Token。
-  - TELEGRAM_CHAT_ID：您的 Telegram Chat ID（可以是您的私人聊天或群组）。
+cd ~/domains && git clone https://github.com/yixiu001/serv00-script.git && cd serv00-script && bash vless.sh
 
-### 2，fork本项目
-1. **修改 `ACCOUNTS_JSON`**
+5，执行命令
 
-   在 fork 后的仓库中，用户需要在项目的 Settings -> Secrets 页面添加和配置 `ACCOUNTS_JSON`。
+cd ~/domains/$USER.serv00.net/vless && ./check_vless.sh -p <端口号>
 
-   ```json
-   [
-       {
-           "host": "example1.com",
-           "port": 22,
-           "username": "user1",
-           "password": "password1",
-           "cron": "cd ~/domains/$USER.serv00.net/vless && ./check_vless.sh"
-       },
-       {
-           "host": "example2.com",
-           "port": 22,
-           "username": "user2",
-           "password": "password2"
-           // 没有cron参数，使用默认命令
-       }
-   ]
+6，复制信息中返回的vless信息并粘贴到 v2ray中使用
 
-   ```
+7，配置定时任务维护节点
 
-2. **设置 Telegram Secrets**
+在面板中依次打开Cron jobs->Add cron job->Specify time选择每小时执行一次Hourly->Command中输入以下命令
 
-   用户需要设置并配置他们自己的 Telegram Bot API Token 和 Chat ID 作为 Secrets：
-    - `TELEGRAM_TOKEN`：他们的 Telegram Bot API Token。
-    - `TELEGRAM_CHAT_ID`：他们的 Telegram Chat ID。
+cd ~/domains/$USER.serv00.net/vless && ./check_vless.sh
 
-3. **提交修改**
+六、其他常用命令
+1，删除vless节点代码以及进程关闭
 
-   用户需要将修改后的文件提交到他们 fork 的仓库中，GitHub Actions 将根据定时计划开始运行监控任务。
+pm2 delete vless && rm -rf ~/domains/serv00-script && rm -rf ~/domains/$USER.serv00.net/vless
 
-### 运行和监控
+2，查看当前vless节点状态
 
-- GitHub Actions 将按照设定的计划（每20分钟一次）运行 `check_vless.yml` 中定义的任务。
-- 每次执行将检查服务器上 PM2 和 vless 进程的状态，根据需要执行恢复操作，并将结果通过 Telegram 发送通知。
+pm2 status
 
-### 注意事项
+# 如果状态异常可以执行以下命令重启
 
-- 确保在 `ACCOUNTS_JSON` 中正确配置每台服务器的信息，包括主机名、端口、用户名和密码。
-- 定期检查 GitHub Actions 的执行结果和 Telegram 的通知，确保服务器状态的监控和恢复工作正常进行。
+cd ~/domains/$USER.serv00.net/vless && ./check_vless.sh
 
+3，查看错误日志
+如果出现异常可以执行以下命令查看日志截图发到TG群聊解决
+
+pm2 logs
+后续其他命令修改待更新！！！
